@@ -41,9 +41,9 @@ training remains a GPU-only optional track; see
 
 This repository includes a CPU-safe AI Workbench bootstrap script at
 `.project/brev.nvwb-startup.sh`. It installs Docker and AI Workbench, clones
-this repository's `main` branch, builds the locked `uv` environment, and
-exposes Jupyter through port 8888. It does not install NVIDIA drivers, CUDA, or
-request a GPU.
+this repository's `main` branch, builds the locked `uv` environment when
+DevX-Lab starts, and exposes Jupyter through port 8888. It does not install
+NVIDIA drivers, CUDA, or request a GPU.
 
 On the [Brev Launchable creation page](https://brev.nvidia.com/launchables/create):
 

@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
-# Default workshop setup: CPU execution with hosted model APIs.
+# Default workshop image setup. The project mount is unavailable at image-build
+# time, so the locked Python environment is created when DevX-Lab starts.
 set -euo pipefail
-
-cd /project
-uv sync --locked
 
 # Some Workbench base images do not include the Node version manager used by
 # Module 5 and Module 6. These tools do not require CUDA.
