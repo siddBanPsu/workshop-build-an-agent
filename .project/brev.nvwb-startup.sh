@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ### STARTUP SCRIPT CONFIGURATION ###
-readonly GIT_REPO="https://github.com/brevdev/workshop-build-an-agent"
+readonly GIT_REPO="https://github.com/siddBanPsu/workshop-build-an-agent"
 readonly TARGET_BRANCH=main
 readonly TARGET_APPLICATION=DevX-Lab
 readonly LOG_FILE=/home/ubuntu/.startup-script.log

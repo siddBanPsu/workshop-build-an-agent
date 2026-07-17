@@ -1,4 +1,4 @@
-# Build An Agent Workshop  [![ Click here to deploy.](https://brev-assets.s3.us-west-1.amazonaws.com/nv-lb-dark.svg)](https://brev.nvidia.com/launchable/deploy?launchableID=env-32kC34ErT9wsqTcJyaKMxBEuhr2) [![Open In AI Workbench](https://img.shields.io/badge/Open_In-AI_Workbench-76B900)](https://ngc.nvidia.com/open-ai-workbench/aHR0cHM6Ly9naXRodWIuY29tL2JyZXZkZXYvd29ya3Nob3AtYnVpbGQtYW4tYWdlbnQ=)
+# Build An Agent Workshop
 
 The Build An Agent Workshop is a comprehensive, hands-on learning experience that teaches you how to create, deploy, and evaluate AI agents using NVIDIA technology. Through six progressive modules, you'll build intelligent systems that can perform complex tasks, learn to implement Retrieval Augmented Generation (RAG), and master the art of evaluating, improving, and securing agent performance.
 
@@ -36,6 +36,27 @@ uv run jupyter lab
 Modules 1–3, 5, and 6 work in this default environment. Module 4's local GRPO
 training remains a GPU-only optional track; see
 [`code/4-agent-customization/README.md`](code/4-agent-customization/README.md).
+
+## Create a CPU Brev Launchable
+
+This repository includes a CPU-safe AI Workbench bootstrap script at
+`.project/brev.nvwb-startup.sh`. It installs Docker and AI Workbench, clones
+this repository's `main` branch, builds the locked `uv` environment, and
+exposes Jupyter through port 8888. It does not install NVIDIA drivers, CUDA, or
+request a GPU.
+
+On the [Brev Launchable creation page](https://brev.nvidia.com/launchables/create):
+
+1. Select **I have code files in a git repository** and enter `https://github.com/siddBanPsu/workshop-build-an-agent`.
+2. Select **VM Mode** and paste the contents of `.project/brev.nvwb-startup.sh` as the startup script.
+3. Choose a **CPU-only** hardware profile.
+4. Select **No, I don't want Jupyter**—the startup script launches Workbench's Jupyter application itself.
+5. Add a secure link named `jupyter` on port `8888`, then create the Launchable.
+
+After it starts, configure `NVIDIA_API_KEY` (and optionally `TAVILY_API_KEY`
+and `LANGSMITH_API_KEY`) as AI Workbench project secrets or in an untracked
+`secrets.env` file before running the API-backed modules. Do not commit that
+file.
 
 ## Workshop Modules
 
@@ -129,4 +150,3 @@ By the end of this workshop, you'll know how to:
 - **Secure agents** with kernel-level enforcement, data classification, and red-team evaluation
 - **Deploy and monitor** agents in production environments
 - **Continuously improve** agent performance through systematic evaluation
-
