@@ -24,9 +24,8 @@ The entire workshop can take anywhere from 12 to 18 hours to complete, depending
 
 ## CPU-first setup
 
-The default workshop environment runs on CPU and uses hosted APIs for model
-inference. After setting `NVIDIA_API_KEY` (and optionally `TAVILY_API_KEY` and
-`LANGSMITH_API_KEY`), create the locked local environment with:
+The default workshop environment runs on CPU and starts without any hosted API
+keys. Create the locked local environment with:
 
 ```bash
 uv sync --locked
@@ -53,10 +52,16 @@ On the [Brev Launchable creation page](https://brev.nvidia.com/launchables/creat
 4. Select **No, I don't want Jupyter**—the startup script launches Workbench's Jupyter application itself.
 5. Add a secure link named `jupyter` on port `8888`, then create the Launchable.
 
-After it starts, configure `NVIDIA_API_KEY` (and optionally `TAVILY_API_KEY`
-and `LANGSMITH_API_KEY`) as AI Workbench project secrets or in an untracked
-`secrets.env` file before running the API-backed modules. Do not commit that
-file.
+The Launchable starts without prompting for secrets. When you are ready to use
+API-backed modules, create an untracked `secrets.env` file in the project:
+
+```bash
+cp secrets.env.example secrets.env
+# Edit secrets.env and add only the keys you want to use.
+```
+
+Restart DevX-Lab after editing the file so the Jupyter process loads it. Do
+not commit `secrets.env`.
 
 ## Workshop Modules
 
