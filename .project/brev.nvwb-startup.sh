@@ -1,4 +1,5 @@
 #!/bin/bash
+set -eo pipefail
 
 ### STARTUP SCRIPT CONFIGURATION ###
 readonly GIT_REPO="https://github.com/siddBanPsu/workshop-build-an-agent"
