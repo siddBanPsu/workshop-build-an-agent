@@ -54,6 +54,12 @@ sudo ln -sf /opt/python/bin/python3.12 /usr/local/bin/python
 sudo ln -sf /opt/python/bin/pip3.12 /usr/local/bin/pip
 sudo /opt/python/bin/pip3.12 install --upgrade setuptools pip
 
+# Install uv globally so build hooks and the Jupyter application use the same
+# locked CPU/API-first environment. Keep Python itself pinned by .python-version.
+curl -LsSf https://astral.sh/uv/install.sh | sh -s -- --no-modify-path
+sudo install -m 0755 "$HOME/.local/bin/uv" /usr/local/bin/uv
+uv --version
+
 # configure custom docker apt repo
 sudo mkdir -p /etc/apt/keyrings
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg

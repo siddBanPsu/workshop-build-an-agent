@@ -412,13 +412,8 @@ def get_llm(config: Config):
         config: The application configuration
         
     Returns:
-        Either LLM (API), HuggingFaceLLM (local), or OpenAILLM (vLLM server)
+        Either OpenAILLM (hosted or self-hosted API) or HuggingFaceLLM (local).
     """
     if config.use_api:
-        # Check if using NVIDIA NIM or local vLLM server
-        if "nvidia" in config.llm_base_url.lower() or "integrate.api" in config.llm_base_url:
-            return LLM(config)
-        else:
-            return OpenAILLM(config)
-    else:
-        return HuggingFaceLLM(config)
+        return OpenAILLM(config)
+    return HuggingFaceLLM(config)

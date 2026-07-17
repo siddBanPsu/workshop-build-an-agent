@@ -22,6 +22,21 @@ At the end of this workshop, you will take home:
 
 The entire workshop can take anywhere from 12 to 18 hours to complete, depending on depth of exploration.
 
+## CPU-first setup
+
+The default workshop environment runs on CPU and uses hosted APIs for model
+inference. After setting `NVIDIA_API_KEY` (and optionally `TAVILY_API_KEY` and
+`LANGSMITH_API_KEY`), create the locked local environment with:
+
+```bash
+uv sync --locked
+uv run jupyter lab
+```
+
+Modules 1–3, 5, and 6 work in this default environment. Module 4's local GRPO
+training remains a GPU-only optional track; see
+[`code/4-agent-customization/README.md`](code/4-agent-customization/README.md).
+
 ## Workshop Modules
 
 ### Module 1: Build an Agent (1-2 hours)
@@ -114,5 +129,4 @@ By the end of this workshop, you'll know how to:
 - **Secure agents** with kernel-level enforcement, data classification, and red-team evaluation
 - **Deploy and monitor** agents in production environments
 - **Continuously improve** agent performance through systematic evaluation
-
 

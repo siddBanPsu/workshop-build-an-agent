@@ -17,9 +17,15 @@ class Config:
     # API-based LLM configuration (for base agent)
     # -------------------------------------
 
-    llm_base_url: str = "https://integrate.api.nvidia.com/v1"
-    llm_model_name: str = "nvidia/nvidia-nemotron-nano-9b-v2"
-    llm_api_key: str = field(default_factory=lambda: os.environ.get("NVIDIA_API_KEY", ""))
+    llm_base_url: str = field(default_factory=lambda: os.getenv(
+        "CUSTOM_MODEL_BASE_URL", "https://integrate.api.nvidia.com/v1"
+    ))
+    llm_model_name: str = field(default_factory=lambda: os.getenv(
+        "CUSTOM_MODEL_NAME", "nvidia/nvidia-nemotron-nano-9b-v2"
+    ))
+    llm_api_key: str = field(default_factory=lambda: os.getenv(
+        "CUSTOM_MODEL_API_KEY", os.getenv("NVIDIA_API_KEY", "")
+    ))
     
     # Sampling parameters (reduced temperature for deterministic outputs)
     llm_temperature: float = 0.1
@@ -40,13 +46,21 @@ class Config:
     max_new_tokens: int = 1024
     
     # Device configuration
-    device: str = "cuda"  # or "cpu"
+    device: str = field(default_factory=lambda: os.getenv("MODEL_DEVICE", "cpu"))
     
     # Whether to use API or local HuggingFace model
-    use_api: bool = True  # Set to False after customization training
-    api_base_url: str = "http://localhost:8000/v1"  # For vLLM or similar
-    api_key: str = "not-needed-for-local"
-    api_model_name: str = "local-model"
+    use_api: bool = field(default_factory=lambda: os.getenv(
+        "WORKSHOP_INFERENCE_MODE", "api"
+    ).lower() == "api")
+    api_base_url: str = field(default_factory=lambda: os.getenv(
+        "CUSTOM_MODEL_BASE_URL", "https://integrate.api.nvidia.com/v1"
+    ))
+    api_key: str = field(default_factory=lambda: os.getenv(
+        "CUSTOM_MODEL_API_KEY", os.getenv("NVIDIA_API_KEY", "")
+    ))
+    api_model_name: str = field(default_factory=lambda: os.getenv(
+        "CUSTOM_MODEL_NAME", "nvidia/nvidia-nemotron-nano-9b-v2"
+    ))
 
     # -------------------------------------
     # Agent configuration

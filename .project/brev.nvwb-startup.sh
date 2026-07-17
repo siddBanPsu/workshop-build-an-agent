@@ -1,8 +1,8 @@
 #!/bin/bash
 
 ### STARTUP SCRIPT CONFIGURATION ###
-readonly GIT_REPO="https://github.com/nv-edwli/workshop-build-an-agent"
-readonly TARGET_BRANCH=rkraus/new-lab
+readonly GIT_REPO="https://github.com/brevdev/workshop-build-an-agent"
+readonly TARGET_BRANCH=main
 readonly TARGET_APPLICATION=DevX-Lab
 readonly LOG_FILE=/home/ubuntu/.startup-script.log
 
@@ -35,18 +35,18 @@ sudo -i -u ubuntu /bin/bash --login << EOF 2>&1 | tee -a $LOG_FILE
 sudo systemctl start docker
 
 # Download and install NVIDIA AI Workbench only if not already present
-if [ ! -d "~/.nvwb/bin" ]; then
+if [ ! -d "\$HOME/.nvwb/bin" ]; then
     echo "NVIDIA AI Workbench not found, lets fix that..."
 
     # Download NVIDIA AI Workbench
     echo "Downloading NVIDIA AI Workbench..."
-    mkdir -p ~/.nvwb/bin
-    curl -L https://workbench.download.nvidia.com/stable/workbench-cli/$(curl -L -s https://workbench.download.nvidia.com/stable/workbench-cli/LATEST)/nvwb-cli-$(uname)-$(uname -m) --output ~/.nvwb/bin/nvwb-cli
-    chmod +x ~/.nvwb/bin/nvwb-cli
+    mkdir -p "\$HOME/.nvwb/bin"
+    curl -L https://workbench.download.nvidia.com/stable/workbench-cli/$(curl -L -s https://workbench.download.nvidia.com/stable/workbench-cli/LATEST)/nvwb-cli-$(uname)-$(uname -m) --output "\$HOME/.nvwb/bin/nvwb-cli"
+    chmod +x "\$HOME/.nvwb/bin/nvwb-cli"
 
     # Install NVIDIA AI Workbench
     echo "Installing NVIDIA AI Workbench..."
-    sudo ~/.nvwb/bin/nvwb-cli install --noninteractive --accept --docker --drivers --uid 1000 --gid 1000
+    sudo "\$HOME/.nvwb/bin/nvwb-cli" install --noninteractive --accept --docker --uid 1000 --gid 1000
 else
     echo "NVIDIA AI Workbench already installed. Skipping download and installation."
 fi
@@ -76,15 +76,8 @@ nvwb switch-branch $TARGET_BRANCH --context local --project \$PROJECT_PATH
 # Build the application
 nvwb build --context local --project \$PROJECT_PATH
 
-# Ensure /run/cdi/ exists with a populated NVIDIA CDI spec before NVWB validates
-# the mount source. On a fresh Brev node, nvidia-cdi-refresh.service may not have
-# run yet — generate the spec eagerly so NemoClaw can attach the GPU in M6.
-sudo mkdir -p /run/cdi
-sudo nvidia-ctk cdi generate --output=/run/cdi/nvidia.yaml 2>/dev/null || true
-
 # Configure project's system mounts
 nvwb configure mounts /var/run/:/var/host-run/ --project \$PROJECT_PATH --context local
-nvwb configure mounts /run/cdi/:/run/cdi/ --project \$PROJECT_PATH --context local
 
 
 ### CONFIGURE WORKSHOP SERVICE UNIT FILE ###

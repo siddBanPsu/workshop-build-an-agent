@@ -1,10 +1,10 @@
 #!/usr/bin/env python3.12
 """
-Bash Computer Use Agent - HuggingFace Implementation
+Bash Computer Use Agent - API or HuggingFace Implementation
 
-This is the entry point for running the customized bash agent with local
-HuggingFace model inference. Uses the trained model checkpoint from
-GRPO training (02_grpo_training.ipynb).
+This is the entry point for running the customized bash agent. It defaults to
+hosted OpenAI-compatible inference and can use a local HuggingFace checkpoint
+after GPU GRPO training.
 
 Usage:
     python -m bash_agent.main_hf
@@ -150,7 +150,7 @@ def main(config: Config):
 def parse_args():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(
-        description="Bash Computer Use Agent with HuggingFace inference"
+        description="Bash Computer Use Agent with hosted API or HuggingFace inference"
     )
     parser.add_argument(
         "--model-path",
@@ -166,8 +166,8 @@ def parse_args():
     parser.add_argument(
         "--api-url",
         type=str,
-        default="http://localhost:8000/v1",
-        help="API base URL when using --use-api"
+        default=None,
+        help="API base URL when using --use-api (defaults to CUSTOM_MODEL_BASE_URL)"
     )
     parser.add_argument(
         "--temperature",
@@ -178,8 +178,8 @@ def parse_args():
     parser.add_argument(
         "--device",
         type=str,
-        default="cuda",
-        help="Device to run on (default: cuda)"
+        default=None,
+        help="Device for local HuggingFace inference (defaults to MODEL_DEVICE or cpu)"
     )
     return parser.parse_args()
 
@@ -190,15 +190,13 @@ if __name__ == "__main__":
     # Create configuration
     config = Config()
     
-    # For HuggingFace inference, disable API mode
-    config.use_api = False
-
     # Override with command line arguments
     if args.model_path:
         config.model_path = args.model_path
     if args.use_api:
         config.use_api = True
-        config.api_base_url = args.api_url
+        if args.api_url:
+            config.api_base_url = args.api_url
     if args.temperature:
         config.llm_temperature = args.temperature
     if args.device:
